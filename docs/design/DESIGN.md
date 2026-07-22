@@ -12,8 +12,8 @@ npm run design:stage      # idempotent: demo accounts frozen in each state
 npm run design:capture    # re-captures all ~58 screenshots
 ```
 
-A Figma companion file exists with the token variables, text styles, and core
-components: [CYF Mentor Matching — Design](https://www.figma.com/design/bTd666Gi3EO5WFEHcFj7oq).
+A Penpot companion file exists with the token variables, text styles, and core
+components: [CYF Mentor Matching — Design](https://design.penpot.app/#/workspace?team-id=a1a9e568-e174-80fb-8008-5d048cb5e258&project-id=7f4897ee-b258-8011-8008-5d7f7a500505&file-id=9c0d2cc0-f14a-8107-8008-5d7fa6d2f0fe&page-id=9c0d2cc0-f14a-8107-8008-5d7fa6d31670).
 
 ---
 
