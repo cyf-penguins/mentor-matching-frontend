@@ -1,0 +1,200 @@
+@import "tailwindcss";
+@import "@fontsource-variable/fraunces/index.css";
+@import "@fontsource-variable/public-sans/index.css";
+
+/* ---------- 1. Semantic tokens: light (default) ---------- */
+:root {
+  color-scheme: light; /* native controls (selects, scrollbars) match */
+  --bg: #faf6f2; /* warm paper */
+  --fg: #231d1b; /* warm ink */
+  --surface: #ffffff;
+  --line: #e9ddd5;
+  --muted: #6f6259;
+  --accent: #d80f0f; /* CYF red — AA on paper/white */
+  --accent-hover: #a71000;
+  --accent-soft: #ea4549; /* decoration only — never small text */
+  --tint: #fbeae7;
+  --on-accent: #ffffff;
+  --ok: #1f7a4d;
+  --ok-tint: #e7f3ec;
+  --warn: #875c15;
+  --warn-tint: #f8efdd;
+}
+
+/* ---------- 2. Dark values, twice ----------
+   (a) OS prefers dark AND the user hasn't forced light;
+   (b) the user explicitly chose dark via the toggle.
+   Both blocks are identical — that duplication is what makes every
+   OS-theme × app-toggle combination work. Miss one and some
+   combination shows the wrong theme. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #191412;
+    --fg: #f2eae4;
+    --surface: #251e1a;
+    --line: #3d322c;
+    --muted: #a99a90;
+    --accent: #f5807f; /* lifted for contrast on dark */
+    --accent-hover: #ffa19f;
+    --accent-soft: #ea4549;
+    --tint: #38221f;
+    --on-accent: #1c1210;
+    --ok: #79cfa0;
+    --ok-tint: #22352b;
+    --warn: #dcaa54;
+    --warn-tint: #3a2f1c;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #191412;
+  --fg: #f2eae4;
+  --surface: #251e1a;
+  --line: #3d322c;
+  --muted: #a99a90;
+  --accent: #f5807f;
+  --accent-hover: #ffa19f;
+  --accent-soft: #ea4549;
+  --tint: #38221f;
+  --on-accent: #1c1210;
+  --ok: #79cfa0;
+  --ok-tint: #22352b;
+  --warn: #dcaa54;
+  --warn-tint: #3a2f1c;
+}
+
+/* ---------- 3. Expose to Tailwind (v4, CSS-first) ----------
+   There is no tailwind.config.js — this block IS the config.
+   Each --color-* line mints the utilities: bg-bg, text-fg,
+   border-line, bg-accent, text-on-accent, … */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-surface: var(--surface);
+  --color-line: var(--line);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-tint: var(--tint);
+  --color-on-accent: var(--on-accent);
+  --color-ok: var(--ok);
+  --color-ok-tint: var(--ok-tint);
+  --color-warn: var(--warn);
+  --color-warn-tint: var(--warn-tint);
+  --font-display: "Fraunces Variable", Georgia, "Times New Roman", serif;
+  --font-sans: "Public Sans Variable", "Helvetica Neue", Arial, sans-serif;
+}
+
+/* ---------- 4. Base ---------- */
+body {
+  background-color: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Paper grain over everything (the "never flat white" rule);
+   content sits above it via #root's z-index */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+#root {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- 5. Signature: the pairing thread ---------- */
+/* The hero thread draws itself once on load (SVG stroke trick) */
+.thread-draw {
+  stroke-dasharray: 240;
+  stroke-dashoffset: 240;
+  animation: thread-draw 0.9s cubic-bezier(0.6, 0, 0.2, 1) 0.55s forwards;
+}
+.thread-dot {
+  opacity: 0;
+  animation: thread-pop 0.3s ease-out forwards;
+}
+.thread-dot-a {
+  animation-delay: 0.5s;
+} /* pops before the line */
+.thread-dot-b {
+  animation-delay: 1.35s;
+} /* pops after it lands */
+@keyframes thread-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes thread-pop {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Hero staggered rise — the ONE orchestrated motion moment */
+.rise {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: rise 0.55s cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+}
+.rise-1 {
+  animation-delay: 0.05s;
+}
+.rise-2 {
+  animation-delay: 0.15s;
+}
+.rise-3 {
+  animation-delay: 0.25s;
+}
+.rise-4 {
+  animation-delay: 0.4s;
+}
+@keyframes rise {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Accessibility: ALL motion collapses to final states, in one place */
+@media (prefers-reduced-motion: reduce) {
+  .rise,
+  .thread-dot {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+  .thread-draw {
+    stroke-dashoffset: 0;
+    animation: none;
+  }
+  * {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------- 6. Overshoot heading underline ----------
+   The negative left and +1.2em width push the bar past both edges
+   of the heading — an ::after element, never a border. */
+.overshoot {
+  position: relative;
+  display: inline-block;
+}
+.overshoot::after {
+  content: "";
+  position: absolute;
+  left: -0.15em;
+  bottom: -0.18em;
+  width: calc(100% + 1.2em);
+  height: 3px;
+  border-radius: 2px;
+  background: var(--accent-soft);
+}
