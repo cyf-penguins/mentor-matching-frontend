@@ -105,3 +105,7 @@ git rebase -i origin/develop                         # squash to one commit
 git push --force-with-lease                          # publish
 # open PR -> develop, "Closes #<issue>", template filled
 ```
+
+## Monorepo note
+
+This repo holds both apps: work in `frontend/` or `backend/` per your issue's area label. Branch naming stays the same; use the **commit scope** to convey the area — `feat(frontend): …`, `bug(backend): …` — and keep each PR to a single area whenever possible.
